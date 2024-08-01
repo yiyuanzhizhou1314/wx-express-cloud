@@ -45,7 +45,7 @@ app.get("/api/count", async (req, res) => {
 // 小程序调用，获取微信 Open ID
 app.get("/api/wx_openid", async (req, res) => {
   if (req.headers["x-wx-source"]) {
-    res.send(req.headers["x-wx-openid"]);
+    res.send('user openid'+req.headers["x-wx-openid"]);
   }
 });
 

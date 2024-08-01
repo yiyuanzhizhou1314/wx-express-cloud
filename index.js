@@ -17,6 +17,30 @@ app.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+// 微信消息接口
+app.get("/sendMs", async (req, res) => {
+  const request = require('request')
+  return new Promise((resolve, reject) => {
+    request({
+      method: 'POST',
+      url: 'http://api.weixin.qq.com/cgi-bin/message/custom/send',
+      // 资源复用情况下，参数from_appid应写明发起方appid
+      // url: 'http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=wxxxxx'
+      body: JSON.stringify({
+        touser: "o_HkX0So7PD7GWBL7QQ4KGz5ca_M", // 一般是消息推送body的FromUserName值，为用户的openid
+        msgtype: "text",
+        text: {
+          content: "Hello World111"
+        }
+      })
+    }, function (error, response) {
+      console.log('接口返回内容', response.body)
+      resolve(JSON.parse(response.body))
+      res.send(JSON.parse(response.body))
+    })
+  })
+});
+
 // 更新计数
 app.post("/api/count", async (req, res) => {
   const { action } = req.body;
@@ -45,7 +69,7 @@ app.get("/api/count", async (req, res) => {
 // 小程序调用，获取微信 Open ID
 app.get("/api/wx_openid", async (req, res) => {
   if (req.headers["x-wx-source"]) {
-    res.send('user openid'+req.headers["x-wx-openid"]);
+    res.send('user openid' + req.headers["x-wx-openid"]);
   }
 });
 

@@ -18,7 +18,7 @@ app.get("/", async (req, res) => {
 });
 
 // 微信消息接口
-app.get("/sendMs", async (req, res) => {
+app.get("/api/sendMs", async (req, res) => {
   const request = require('request')
   return new Promise((resolve, reject) => {
     request({
@@ -36,7 +36,7 @@ app.get("/sendMs", async (req, res) => {
     }, function (error, response) {
       console.log('接口返回内容', response.body)
       resolve(JSON.parse(response.body))
-      res.send(JSON.parse(response.body))
+      res.send('6666-----'+JSON.parse(response.body))
     })
   })
 });

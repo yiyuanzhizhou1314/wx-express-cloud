@@ -7,7 +7,7 @@ const { init: initDB, Counter } = require("./db");
 const logger = morgan("tiny");
 
 const app = express();
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(logger);
@@ -19,25 +19,14 @@ app.get("/", async (req, res) => {
 
 // 微信消息接口
 app.get("/api/sendMs", async (req, res) => {
-  const request = require('request')
-  return new Promise((resolve, reject) => {
-    request({
-      method: 'POST',
-      url: 'http://api.weixin.qq.com/cgi-bin/message/custom/send',
-      // 资源复用情况下，参数from_appid应写明发起方appid
-      // url: 'http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=wxxxxx'
-      body: JSON.stringify({
-        touser: "o_HkX0So7PD7GWBL7QQ4KGz5ca_M", // 一般是消息推送body的FromUserName值，为用户的openid
-        msgtype: "text",
-        text: {
-          content: "Hello World111"
-        }
-      })
-    }, function (error, response) {
-      console.log('接口返回内容', response.body)
-      resolve(JSON.parse(response.body))
-      res.send('6666-----'+JSON.parse(response.body))
-    })
+  console.log('消息推送', req.body)
+  const { ToUserName, FromUserName, MsgType, Content, CreateTime } = req.body
+  res.send({
+    ToUserName: FromUserName,
+    FromUserName: ToUserName,
+    CreateTime: CreateTime,
+    MsgType: 'text',
+    Content: '6666这是回复的消息'
   })
 });
 
